@@ -12,13 +12,6 @@ class Vertex:
     def addNeighbor(self, neighbor, weight=0):
         self.adjacent[neighbor] = weight
 
-    def removeNeighbor(self, neighbor):
-        print('removing %s from %s' %(str(neighbor), self.id))
-        for x in self.adjacent:
-            if str(neighbor) == x.id:
-                del self.adjacent[x]
-                break
-        
     def getNeighbors(self):
         return self.adjacent.keys()
 
@@ -34,7 +27,6 @@ class Graph:
         self.width = width
         self.height = height
         self.generateMap()
-        self.getShortestDistance(12)
 
     def __iter__(self):
         return iter(self.vert_dict.values())
