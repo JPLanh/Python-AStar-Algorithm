@@ -131,30 +131,31 @@ class Graph:
                     return (getPosition + self.width + 1) % (self.width * self.height)
             else: return -1
 
-    class DijkstraDistance:
-        def __init__(self, vertex, distance):
-            self.vertex = vertex
-            self.distance = distance
-
-    def getShortestDistance(self, source):
-        vertexQueue = queue.PriorityQueue()
-        distances = {}
-
-        #initialize all distances to 0
-        distances[source] = self.DijkstraDistance(source, 0)
-        for x in range(0, len(self.vert_dict)):
-            if x <> source:
-                distances[x] = self.DijkstraDistance(x, sys.maxint)
-            vertexQueue.put(self.DijkstraDistance(x, sys.maxint))
-
-        while (vertexQueue.qsize() > 1):
-            tempDijk = vertexQueue.get(True)
-            tempNode = self.vert_dict[tempDijk.vertex]
-            for x in tempNode.getNeighbors():
-                currentNode = self.vert_dict[x.id]
-                disComparison = float(distances[tempNode.id].distance) + float(tempNode.getWeight(x))
-                if disComparison <  float(distances[x.id].distance):
-                    vertexQueue.put(self.DijkstraDistance(x.id, disComparison))
-                    distances[x.id].distance = disComparison
+    def aStar(self, source, goal):
+        queues = queue.PriorityQueue()
+        queues.put(source, 0)
+        cameFrom = {}
+        currentCost = {}
+        cameFrom[source] = None
+        currentCost[source] = 0
         
-        return distances
+        while not queues.empty():
+            current = queues.get()
+            if current == goal:
+                break
+            for next in self.vert_dict[current].getNeighbors():
+                newCost = currentCost[current] + self.vert_dict[current].getWeight(next)
+                if next.id not in cameFrom or newCost < currentCost[next.id]:
+                    currentCost[next.id] = newCost
+                    priority = newCost
+                    queues.put(next.id, priority)
+                    cameFrom[next.id] = current
+        return cameFrom, currentCost
+    
+    def reconstruct_path(self, cameFrom, source, goal):
+        current = goal
+        path = []
+        while current != source:
+            path.append(current)
+            current = cameFrom[current]
+        return path
