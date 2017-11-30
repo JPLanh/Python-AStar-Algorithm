@@ -1,2 +1,2 @@
-# Python-Dijkstra-Distance
-A conversion from CSULB's CECS 328 Dijkstra Distance that was made in Java and converted into Python
+# Python aStar algorithm
+A more efficient algorithm compared to the Dijkstra Distance to finding the shortest distance from a node to another node
